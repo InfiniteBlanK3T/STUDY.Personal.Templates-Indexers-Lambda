@@ -8,7 +8,7 @@ DataWrapper::DataWrapper():
 
 DataWrapper::~DataWrapper()
 {
-	delete(fData);
+	delete[] fData;
 }
 
 const DataMap& DataWrapper::operator[](size_t aIndex) const
