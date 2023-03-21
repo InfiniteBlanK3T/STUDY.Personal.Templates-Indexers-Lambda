@@ -18,22 +18,24 @@ const DataMap& DataWrapper::operator[](size_t aIndex) const
 
 bool DataWrapper::load(const std::string& aFileName)
 {
-	std::fstream file;
-	file.open(aFileName);
-	if (file.is_open())
+	std::fstream file (aFileName,std::ifstream::in);
+	bool Result = false;	
+	if ( file )
 	{		
-		file >> fSize;
-		while (file >> fData[fSize])
+		if (file >> fSize)
 		{
-			fSize++;
+			{				
+				fData = new DataMap[fSize];
+				for ( size_t i = 0; i < fSize; i++ )
+				{
+					file >> fData[i];
+				}
+				Result = true;				
+			}
 		}
-
-		return 0;
+		file.close();		
 	}
-	else
-	{
-		return 1;
-	}
+	return Result;
 }
 
 size_t DataWrapper::size() const noexcept

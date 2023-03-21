@@ -30,6 +30,7 @@ void testMap()
 }
 
 #include "DataWrapper.h"
+#include <cassert>
 
 bool testDataWrapper1( DataWrapper& aWrapper, const std::string& aFileName )
 {
@@ -57,24 +58,36 @@ void basicIndexer( const DataWrapper& aWrapper )
     std::cout << std::endl;
 }
 
-//void lambdaIndexer( const DataWrapper& aWrapper )
-//{
-//    std::cout << "Using lambda with ordered mapping logic: " << std::endl;
-//    
-//    auto lOrderedMapper = [&aWrapper] (size_t aIndex) -> char
-//    {
-//		
-//		// Problem 3
-//		
-//    };
-//    
-//    for ( size_t i = 0; i < aWrapper.size(); i++ )
-//    {
-//        std::cout << lOrderedMapper( i );;
-//    }
-//
-//    std::cout << std::endl;
-//}
+void lambdaIndexer( const DataWrapper& aWrapper )
+{
+
+    std::cout << "Using lambda with ordered mapping logic: " << std::endl;
+    
+    auto lOrderedMapper = [&aWrapper] (size_t aIndex) -> char
+    {
+        assert(aIndex < aWrapper.size());
+
+        size_t i = 0;
+
+        for (; i < aWrapper.size(); i++)
+        {
+            if (aWrapper[i].key() == aIndex)
+            {
+                break;
+            }
+        }
+
+        return static_cast<char>(aWrapper[i]);
+    };
+    
+    for ( size_t i = 0; i < aWrapper.size(); i++ )
+    {
+        std::cout << lOrderedMapper( i );;
+    }
+
+    std::cout << std::endl;
+
+}
 
 int main( int argc, char* argv[] )
 {
@@ -93,8 +106,8 @@ int main( int argc, char* argv[] )
     if ( testDataWrapper1( lWrapper, argv[1] ) )
     {
         basicIndexer( lWrapper );        
-        //lambdaIndexer( lWrapper );
-        
+        lambdaIndexer( lWrapper );
+
         return 0;
     }
 
